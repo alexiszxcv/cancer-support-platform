@@ -1,1 +1,21 @@
-[]
+{
+  "name": "Create Supported By Record - Valid Data",
+  "description": "Test the creation of a Supported By record with valid data",
+  "request": {
+    "url": "http://localhost:5000/caregiver/supported_by",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "resource_id": 1,
+      "user_id": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "message": "Supported By record created successfully."
+    }
+  }
+}
