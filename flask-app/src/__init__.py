@@ -34,7 +34,6 @@ def create_app():
     from src.caregivers.caregivers import caregivers
 
     # Register the routes that we just imported so they can be properly handled
-    #app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(caregivers,    url_prefix='/c')
     app.register_blueprint(patients,    url_prefix='/p')
 

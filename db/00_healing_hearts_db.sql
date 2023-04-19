@@ -138,6 +138,7 @@ FOREIGN KEY (treatment_id) REFERENCES treatment(treatment_id)
 -- Create the Treatment Center table
 CREATE TABLE treatment_center (
 center_id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(100),
 street_address VARCHAR(100) NOT NULL,
 state VARCHAR(100) NOT NULL,
 city VARCHAR(100) NOT NULL,

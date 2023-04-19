@@ -4,7 +4,7 @@ from src import db
 
 patients = Blueprint('patient', __name__)
 
-# Get a user's cancer type id
+# Get a patient's cancer type id
 @patients.route('/user/<first_name>/<last_name>', methods=['GET'])
 def get_user_cancer_type(first_name, last_name):
     cursor = db.get_db().cursor()
@@ -19,7 +19,7 @@ def get_user_cancer_type(first_name, last_name):
     the_response.mimetype = 'application/json'
     return the_response
 
-
+# Add a patient's information
 @patients.route('/user', methods=['PUT'])
 def create_user():
     # Get the request body
@@ -28,6 +28,7 @@ def create_user():
     # Extract the necessary fields
     first_name = user_data.get('first_name')
     last_name = user_data.get('last_name')
+    cancer_type_id = user_data.get('cancer_type_id')
     occupation = user_data.get('occupation')
     birth_date = user_data.get('birth_date')
     gender = user_data.get('gender')
@@ -36,10 +37,10 @@ def create_user():
     email_1 = user_data.get('email_1')
     phone_1 = user_data.get('phone_1')
 
-    # Insert the new user into the database
+    # Insert the new information into the database
     cursor = db.get_db().cursor()
-    cursor.execute('INSERT INTO user (first_name, last_name, occupation, birth_date, gender, city, state, email_1, phone_1) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                   (first_name, last_name, occupation, birth_date, gender, city, state, email_1, phone_1))
+    cursor.execute('INSERT INTO user (first_name, last_name, cancer_type_id, occupation, birth_date, gender, city, state, email_1, phone_1) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                   (first_name, last_name, cancer_type_id, occupation, birth_date, gender, city, state, email_1, phone_1))
     db.get_db().commit()
 
     # Return a success message
@@ -48,7 +49,7 @@ def create_user():
     response.mimetype = 'application/json'
     return response
 
-# Delete a user by id
+# Delete a patient by id
 @patients.route('/user/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     cursor = db.get_db().cursor()
@@ -66,7 +67,7 @@ def delete_user(user_id):
         the_response.mimetype = 'application/json'
     return the_response
 
-# Get users with specified cancer type ID
+# Get patients with specified cancer type ID
 @patients.route('/user/<cancer_type_id>', methods=['GET'])
 def get_users_by_cancer_type(cancer_type_id):
     cursor = db.get_db().cursor()
@@ -141,7 +142,7 @@ def get_support_group_members(support_group_id):
 #     the_response.mimetype = 'application/json'
 #     return the_response
 
-# Get users by cancer type and support group (see which groups may have certain cancer typess)
+# Get patients by cancer type and support group (see which groups may have certain cancer types)
 @patients.route('/support_group/<support_group_id>/cancer_type/<cancer_type_id>/users', methods=['GET'])
 def get_users_by_support_group_and_cancer_type(support_group_id, cancer_type_id):
     cursor = db.get_db().cursor()

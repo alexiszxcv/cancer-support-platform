@@ -4,12 +4,12 @@ from src import db
 
 caregivers = Blueprint('caregiver', __name__)
 
-#Get caregiver USER ID
+# Get all caregiver user ids and names
 @caregivers.route('/user', methods=['GET'])
 def get_user():
     user_id = request.args.get('user_id')
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT * FROM users WHERE user_id = {0}'.format(user_id))
+    cursor.execute('SELECT user_id, first_name, last_name FROM user')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -21,38 +21,35 @@ def get_user():
     return the_response
 
 #Add caregiver info
-@caregivers.route('/user', methods=['POST'])
+@caregivers.route('/user', methods=['PUT'])
 def add_user_caregiver():
     data = request.get_json()
-    name = data['name']
+    first_name = data['first_name']
+    last_name = data['last_name']
     email = data['email']
-    password = data['password']
-    phone_number = data['phone_number']
-    address = data['address']
+    phone_1 = data['phone_1']
+    city = data['city']
+    state = data['state']
     cursor = db.get_db().cursor()
-    cursor.execute('INSERT INTO user (name, email, password, phone_number, address) VALUES (%s, %s, %s, %s, %s)', (name, email, password, phone_number, address))
+    cursor.execute('INSERT INTO user (first_name, last_name, email, phone_1, city, state) VALUES (%s, %s, %s, %s, %s, %s)', (first_name, last_name, email, phone_1, city, state))
     db.get_db().commit()
     user_id = cursor.lastrowid
-    cursor.execute('INSERT INTO caregiver (user_id) VALUES (%s)', (user_id,))
-    db.get_db().commit()
     the_response = make_response(jsonify({'user_id': user_id}), 201)
     the_response.mimetype = 'application/json'
     return the_response
 
 
-@caregivers.route('/user/<int:user_id>', methods=['PUT'])
+@caregivers.route('/user/<int:user_id>', methods=['POST'])
 def update_user_caregiver(user_id):
-    # Update an existing caregiver for the current user
-    caregiver = Caregiver.query.filter_by(id=user_id, user_id=current_user.id).first()
-    if not caregiver:
-        return jsonify(error='Caregiver not found!')
     data = request.get_json()
-    caregiver.name = data.get('name', caregiver.name)
-    caregiver.email = data.get('email', caregiver.email)
-    caregiver.phone = data.get('phone', caregiver.phone)
+    name = data.get('name')
+    email_1 = data.get('email_1')
+    email_2 = data.get('email_2')
+    phone_1 = data.get('phone_1')
+    phone_2 = data.get('phone_2')
     db.session.commit()
 
-    # Add new caregiver if specified
+    # Add new caregiver
     new_caregiver = data.get('new_caregiver')
     if new_caregiver:
         name = new_caregiver.get('name')
@@ -167,3 +164,17 @@ def create_meeting():
         return jsonify({'message': 'New entry added to meeting table.'}), 201
     except:
         return jsonify({'error': 'Failed to create a new entry in meeting table.'}), 500
+
+@caregivers.route('/meeting/<int:meeting_id>', methods=['DELETE'])
+def delete_meeting(meeting_id):
+    try:
+        # check if meeting_id exists in the database
+        meeting = Meeting.query.get_or_404(meeting_id)
+
+        # cancel the meeting from the database
+        db.session.delete(meeting)
+        db.session.commit()
+
+        return jsonify({'message': 'Meeting canceled successfully.'}), 200
+    except:
+        return jsonify({'error': 'Failed to cancel meeting.'}), 500
