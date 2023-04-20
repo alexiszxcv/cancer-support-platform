@@ -22,18 +22,18 @@ CREATE TABLE user (
  user_id INT NOT NULL AUTO_INCREMENT,
  first_name VARCHAR(50) NOT NULL,
  last_name VARCHAR(50) NOT NULL,
- occupation VARCHAR(500) NOT NULL,
- birth_date DATE NOT NULL,
- gender VARCHAR(50) NOT NULL,
- city VARCHAR(100) NOT NULL,
- state VARCHAR(50) NOT NULL,
+ occupation VARCHAR(500),
+ birth_date DATE,
+ gender VARCHAR(50),
+ city VARCHAR(100),
+ state VARCHAR(50),
  cancer_type_id INT,
  email_1 VARCHAR(50) NOT NULL,
  email_2 VARCHAR(50),
  phone_1 VARCHAR(50) NOT NULL,
  phone_2 VARCHAR(50),
  PRIMARY KEY (user_id),
- FOREIGN KEY (cancer_type_id) REFERENCES cancer_type(cancer_type_id)
+ FOREIGN KEY (cancer_type_id) REFERENCES cancer_type(cancer_type_id) ON DELETE CASCADE
 );
 
 -- Create the Treatment table
@@ -92,9 +92,8 @@ symptom_id INT NOT NULL,
 start_date DATE NOT NULL,
 end_date DATE,
 severity VARCHAR(500),
-PRIMARY KEY (symptom_id),
 FOREIGN KEY (symptom_id) REFERENCES symptom(symptom_id),
-FOREIGN KEY (user_id) REFERENCES user(user_id)
+FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 -- Create the Typically Exhibits table
@@ -103,7 +102,7 @@ symptom_id INT NOT NULL,
 cancer_type_id INT NOT NULL,
 PRIMARY KEY (symptom_id),
 FOREIGN KEY (symptom_id) REFERENCES symptom(symptom_id),
-FOREIGN KEY (cancer_type_id) REFERENCES user(cancer_type_id)
+FOREIGN KEY (cancer_type_id) REFERENCES user(cancer_type_id) ON DELETE CASCADE
 );
 
 -- Create the Typically Treated With table
@@ -111,7 +110,7 @@ CREATE TABLE typically_treated_with(
  cancer_type_id INT NOT NULL,
  treatment_id INT NOT NULL,
  PRIMARY KEY (cancer_type_id, treatment_id),
- FOREIGN KEY (cancer_type_id) REFERENCES cancer_type(cancer_type_id),
+ FOREIGN KEY (cancer_type_id) REFERENCES cancer_type(cancer_type_id) ON DELETE CASCADE,
  FOREIGN KEY (treatment_id) REFERENCES treatment(treatment_id)
 );
 
@@ -138,7 +137,7 @@ FOREIGN KEY (treatment_id) REFERENCES treatment(treatment_id)
 -- Create the Treatment Center table
 CREATE TABLE treatment_center (
 center_id INT NOT NULL AUTO_INCREMENT,
-name VARCHAR(100),
+name VARCHAR(500),
 street_address VARCHAR(100) NOT NULL,
 state VARCHAR(100) NOT NULL,
 city VARCHAR(100) NOT NULL,
@@ -185,7 +184,7 @@ support_group_id INT NOT NULL,
 user_id INT NOT NULL,
 PRIMARY KEY (support_group_id, user_id),
 FOREIGN KEY (support_group_id) REFERENCES support_group(support_group_id),
-FOREIGN KEY (user_id) REFERENCES user(user_id)
+FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 -- Create the Supported By table
@@ -194,7 +193,7 @@ resource_id INT NOT NULL,
 user_id INT NOT NULL,
 PRIMARY KEY (resource_id, user_id),
 FOREIGN KEY (resource_id) REFERENCES support_resource(resource_id),
-FOREIGN KEY (user_id) REFERENCES user(user_id)
+FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 

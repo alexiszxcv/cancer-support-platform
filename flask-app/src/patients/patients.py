@@ -20,7 +20,7 @@ def get_user_cancer_type(first_name, last_name):
     return the_response
 
 # Add a patient's information
-@patients.route('/user', methods=['PUT'])
+@patients.route('/user', methods=['POST'])
 def create_user():
     # Get the request body
     user_data = request.get_json()
@@ -186,30 +186,31 @@ def get_users_by_support_group_and_cancer_type(support_group_id, cancer_type_id)
 #     the_response.mimetype = 'application/json'
 #     return the_response
 
-@patients.route('/users/<user_id>', methods=['POST'])
-def update_user(user_id):
-    data = request.get_json()
-    city = data.get('city')
-    state = data.get('state')
-
-    cursor = db.get_db().cursor()
-    cursor.execute('UPDATE user SET city = %s, state = %s WHERE user_id = %s', (city, state, user_id))
-    db.get_db().commit()
-
-    response = jsonify({'message': 'User {} updated with city as {} and state as {}'.format(user_id, city, state)})
-    response.status_code = 200
-    return response
-
-# @patients.route('/exhibits/<user_id>', methods=['POST'])
-# def update_symptoms(user_id):
+# @patients.route('/users/<user_id>', methods=['PUT'])
+# def update_user(user_id):
 #     data = request.get_json()
-#     symptom_id = data.get('symptom_id')
-#     start_date = data.get('start_date')
+#     city = data.get('city')
+#     state = data.get('state')
 
 #     cursor = db.get_db().cursor()
-#     cursor.execute('UPDATE exhibits SET symptom_id = %s, start_date = %s WHERE user_id = %s', (symptom_id, start_date, user_id))
+#     cursor.execute('UPDATE user SET city = %s, state = %s WHERE user_id = %s', (city, state, user_id))
 #     db.get_db().commit()
 
-#     response = jsonify({'message': 'Added symptom {} to user {}, which started on {} '.format(symptom_id, user_id, start_date)})
+#     response = jsonify({'message': 'User {} updated with city as {} and state as {}'.format(user_id, city, state)})
 #     response.status_code = 200
 #     return response
+
+@patients.route('/exhibits/<user_id>', methods=['PUT'])
+def update_symptoms(user_id):
+    data = request.get_json()
+    symptom_id = data.get('symptom_id')
+    start_date = data.get('start_date')
+
+    cursor = db.get_db().cursor()
+    cursor.execute('UPDATE exhibits SET symptom_id = %s, start_date = %s WHERE user_id = %s', (symptom_id, start_date, user_id))
+    db.get_db().commit()
+
+    response = jsonify({'message': 'Added symptom {} to user {}, which started on {}'.format(symptom_id, user_id, start_date)})
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
