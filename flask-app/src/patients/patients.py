@@ -82,21 +82,6 @@ def get_users_by_cancer_type(cancer_type_id):
     the_response.mimetype = 'application/json'
     return the_response
 
-# # Get all cancer types typically associated with a given symptom
-# @patients.route('/typically_exhibits/<symptom_id>', methods=['GET'])
-# def typically_exhibits(symptom_id):
-#     cursor = db.get_db().cursor()
-#     cursor.execute('SELECT ct.cancer_type_id, ct.name FROM cancer_type ct JOIN typically_exhibits te ON ct.cancer_type_id = te.cancer_type_id WHERE te.symptom_id = {0}'.format(symptom_id))
-#     row_headers = [x[0] for x in cursor.description]
-#     json_data = []
-#     theData = cursor.fetchall()
-#     for row in theData:
-#         json_data.append(dict(zip(row_headers, row)))
-#     the_response = make_response(jsonify(json_data))
-#     the_response.status_code = 200
-#     the_response.mimetype = 'application/json'
-#     return the_response
-
 # Get all treatments typically used for a given cancer type
 @patients.route('/treatment/<cancer_type_id>', methods=['GET'])
 def treatment(cancer_type_id):
@@ -128,20 +113,6 @@ def get_support_group_members(support_group_id):
     return the_response
 
 
-# @patients.route('/cancer_type/<cancer_type_id>/support_groups', methods=['GET'])
-# def get_support_groups_by_cancer_type(cancer_type_id):
-#     cursor = db.get_db().cursor()
-#     cursor.execute('SELECT sg.support_group_id, sg.name FROM support_group sg JOIN typically_supports ts ON sg.support_group_id = ts.support_group_id WHERE ts.cancer_type_id = {0}'.format(cancer_type_id))
-#     row_headers = [x[0] for x in cursor.description]
-#     json_data = []
-#     theData = cursor.fetchall()
-#     for row in theData:
-#         json_data.append(dict(zip(row_headers, row)))
-#     the_response = make_response(jsonify(json_data))
-#     the_response.status_code = 200
-#     the_response.mimetype = 'application/json'
-#     return the_response
-
 # Get patients by cancer type and support group (see which groups may have certain cancer types)
 @patients.route('/support_group/<support_group_id>/cancer_type/<cancer_type_id>/users', methods=['GET'])
 def get_users_by_support_group_and_cancer_type(support_group_id, cancer_type_id):
@@ -157,49 +128,7 @@ def get_users_by_support_group_and_cancer_type(support_group_id, cancer_type_id)
     the_response.mimetype = 'application/json'
     return the_response
 
-# # Add treatments typically used for a given cancer type for a given user
-# @patients.route('/treatment/<cancer_type_id>', methods=['POST'])
-# def update_treatment(cancer_type_id):
-#     user_id = request.json['user_id']
-#     updated_treatments = request.json['treatment']
-#     cursor = db.get_db().cursor()
-#     for treatment_id in updated_treatments:
-#         cursor.execute('UPDATE updated_treatments SET treatment_id = {0} WHERE user_id = {1} AND cancer_type_id = {2}'.format(treatment_id, user_id, cancer_type_id))
-#     db.get_db().commit()
-#     the_response = make_response(jsonify({'message': 'Updated treatments for user {0} with cancer type {1}'.format(user_id, cancer_type_id)}))
-#     the_response.status_code = 200
-#     the_response.mimetype = 'application/json'
-#     return the_response
-
-
-# # Add treatments typically used for a given cancer type for a given user
-# @patients.route('/user', methods=['POST'])
-# def update_treatment(cancer_type_id):
-#     user_id = request.json['cancer_type_id']
-#     updated_treatments = request.json['treatments']
-#     cursor = db.get_db().cursor()
-#     for treatment_id in updated_treatments:
-#         cursor.execute('UPDATE user_treatments SET treatment_id = {0} WHERE user_id = {1} AND cancer_type_id = {2}'.format(treatment_id, user_id, cancer_type_id))
-#     db.get_db().commit()
-#     the_response = make_response(jsonify({'message': 'Updated treatments for user {0} with cancer type {1}'.format(user_id, cancer_type_id)}))
-#     the_response.status_code = 200
-#     the_response.mimetype = 'application/json'
-#     return the_response
-
-# @patients.route('/users/<user_id>', methods=['PUT'])
-# def update_user(user_id):
-#     data = request.get_json()
-#     city = data.get('city')
-#     state = data.get('state')
-
-#     cursor = db.get_db().cursor()
-#     cursor.execute('UPDATE user SET city = %s, state = %s WHERE user_id = %s', (city, state, user_id))
-#     db.get_db().commit()
-
-#     response = jsonify({'message': 'User {} updated with city as {} and state as {}'.format(user_id, city, state)})
-#     response.status_code = 200
-#     return response
-
+# Update a patient's symptoms
 @patients.route('/exhibits/<user_id>', methods=['PUT'])
 def update_symptoms(user_id):
     data = request.get_json()
