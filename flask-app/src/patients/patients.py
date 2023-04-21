@@ -19,6 +19,7 @@ def get_user_cancer_type(first_name, last_name):
     the_response.mimetype = 'application/json'
     return the_response
 
+
 # Add a patient's information
 @patients.route('/user', methods=['POST'])
 def create_user():

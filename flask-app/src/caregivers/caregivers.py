@@ -115,7 +115,6 @@ def get_connections():
 # Get all symptom names and ids
 @caregivers.route('/symptoms', methods=['GET'])
 def get_symptoms():
-    #user_id = request.args.get('user_id')
     cursor = db.get_db().cursor()
     cursor.execute('SELECT symptom_id, name FROM symptom')
     row_headers = [x[0] for x in cursor.description]
