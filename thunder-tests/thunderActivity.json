@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "835fabbf-736c-4fe5-a653-dbe20feb9419",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:8001/p/user",
+    "url": "localhost:8001/p/user",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-04-20T20:27:26.254Z",
+    "modified": "2023-04-20T20:27:26.254Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]
